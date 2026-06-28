@@ -1,0 +1,28 @@
+{
+  "name": "urlhub-backend",
+  "version": "1.0.0",
+  "description": "URLHub — production URL shortener backend",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "render-build": "npm install && cd ../frontend && npm install && npm run build && cp -r dist ../backend/public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.2",
+    "nanoid": "^5.1.11",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

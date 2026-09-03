@@ -307,7 +307,9 @@ export default function DashboardPage() {
                       <td className="px-4 py-3 text-center font-black text-slate-900 theme-dark:text-white">{url.clicks || 0}</td>
                       <td className="px-4 py-3">
                         <div className="flex flex-nowrap gap-2">
-                          <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(fullShortUrl(url.short_url), "Short URL")}>Copy</button>
+                         // CURRENT (copies short URL like: https://url-hub.onrender.com/vk04)
+// FIXED (copies destination like: https://vikramkumavat.me/)
+<button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(url.full_url, "Full URL")}>Copy</button>
                           <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => openAnalytics(url)}>Analytics</button>
                           <button className="btn btn-primary px-3 py-2 text-xs" type="button" onClick={() => openManage(url)}>Manage</button>
                         </div>

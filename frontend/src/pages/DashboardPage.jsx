@@ -307,9 +307,8 @@ export default function DashboardPage() {
                       <td className="px-4 py-3 text-center font-black text-slate-900 theme-dark:text-white">{url.clicks || 0}</td>
                       <td className="px-4 py-3">
                         <div className="flex flex-nowrap gap-2">
-                         // CURRENT (copies short URL like: https://url-hub.onrender.com/vk04)
-// FIXED (copies destination like: https://vikramkumavat.me/)
-<button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(url.full_url, "Full URL")}>Copy</button>
+                          <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(fullShortUrl(url.short_url), "Short link")}>Short link</button>
+                          <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(url.full_url, "Destination")}>Destination</button>
                           <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => openAnalytics(url)}>Analytics</button>
                           <button className="btn btn-primary px-3 py-2 text-xs" type="button" onClick={() => openManage(url)}>Manage</button>
                         </div>
@@ -401,12 +400,17 @@ export default function DashboardPage() {
               <p className="text-xs font-black uppercase tracking-wide muted-text">Short link</p>
               <button
                 type="button"
-                onClick={() => copyText(fullShortUrl(manageUrl.short_url), "Short URL")}
+                onClick={() => copyText(fullShortUrl(manageUrl.short_url), "Short link")}
                 className="link-title mt-2 block max-w-full truncate text-left font-mono text-lg font-black"
               >
                 {fullShortUrl(manageUrl.short_url)}
               </button>
               <p className="mt-3 truncate text-sm muted-text">{manageUrl.full_url}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(manageUrl.full_url, "Destination URL")}>
+                  Copy Destination
+                </button>
+              </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {manageUrl.disabled ? <span className="badge badge-red">Disabled</span> : <span className="badge badge-green">Active</span>}
                 {manageUrl.password && <span className="badge badge-blue">Protected</span>}

@@ -10,6 +10,11 @@ import {
 } from "../store/slices/urlSlice";
 
 const appOrigin = () => {
+  // In browser, use current origin (more reliable)
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  // Fallback for SSR
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
   return apiUrl.replace(/\/api\/?$/, "");
 };

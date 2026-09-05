@@ -268,54 +268,61 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="link-table w-full min-w-[1040px] text-left">
+            <table className="link-table w-full min-w-max text-left">
               <thead className="border-b text-xs font-black uppercase text-slate-500 theme-dark:text-slate-300">
                 <tr>
-                  <th className="px-4 py-3">Short link</th>
-                  <th className="px-4 py-3">Destination</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Clicks</th>
-                  <th className="px-4 py-3">Actions</th>
+                  <th className="px-4 py-3 w-32">Short link</th>
+                  <th className="px-4 py-3 flex-1">Destination</th>
+                  <th className="px-4 py-3 w-40 text-center">Status</th>
+                  <th className="px-4 py-3 w-56 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {filteredUrls.map((url) => {
                   const expired = url.expiresAt && new Date(url.expiresAt) <= new Date();
+                  const shortCode = url.short_url?.replace(/^.*\//, '') || url.short_url;
                   return (
-                    <tr key={url._id} className="h-16 align-middle">
-                      <td className="max-w-64 px-4 py-3">
+                    <tr key={url._id} className="border-b hover:bg-slate-50 theme-dark:hover:bg-slate-800">
+                      <td className="px-4 py-4">
                         <button
                           type="button"
-                          onClick={() => copyText(fullShortUrl(url.short_url), "Short URL")}
-                          className="link-title block max-w-64 truncate text-left font-mono text-sm font-black"
+                          onClick={() => copyText(fullShortUrl(url.short_url), "Short link")}
+                          className="group inline-block text-left font-mono text-sm font-bold text-indigo-600 hover:text-indigo-700 theme-dark:text-teal-400 theme-dark:hover:text-teal-300"
                           title={fullShortUrl(url.short_url)}
                         >
-                          {fullShortUrl(url.short_url)}
+                          /{shortCode}
+                          <span className="ml-1 inline text-xs opacity-0 group-hover:opacity-100">📋</span>
                         </button>
                       </td>
-                      <td className="max-w-[420px] px-4 py-3">
-                        <a className="block truncate text-sm font-semibold text-slate-600 hover:text-indigo-700 theme-dark:text-slate-300 theme-dark:hover:text-teal-300" href={url.full_url} target="_blank" rel="noreferrer" title={url.full_url}>
-                          {url.full_url}
-                        </a>
-                        <div className="mt-1 flex max-w-[420px] items-center gap-2 overflow-hidden">
-                          {url.description && <span className="truncate text-xs muted-text" title={url.description}>{url.description}</span>}
-                          {(url.tags || []).slice(0, 2).map((item) => <span key={item} className="badge badge-blue">{item}</span>)}
-                          {(url.tags || []).length > 2 && <span className="text-xs font-bold muted-text">+{url.tags.length - 2}</span>}
+                      <td className="px-4 py-4">
+                        <div className="space-y-1">
+                          <a className="block truncate text-sm font-medium text-slate-700 hover:text-indigo-600 theme-dark:text-slate-300 theme-dark:hover:text-teal-400" href={url.full_url} target="_blank" rel="noreferrer" title={url.full_url}>
+                            {url.full_url}
+                          </a>
+                          {url.description && <p className="truncate text-xs text-slate-500 theme-dark:text-slate-400" title={url.description}>{url.description}</p>}
+                          {(url.tags || []).length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {(url.tags || []).slice(0, 2).map((item) => <span key={item} className="badge badge-blue text-xs">{item}</span>)}
+                              {(url.tags || []).length > 2 && <span className="text-xs font-semibold text-slate-500">+{url.tags.length - 2}</span>}
+                            </div>
+                          )}
                         </div>
                       </td>
-                      <td className="px-4 py-3">
-                        <div className="flex flex-nowrap gap-2">
-                          {url.disabled ? <span className="badge badge-red">Disabled</span> : expired ? <span className="badge badge-amber">Expired</span> : <span className="badge badge-green">Active</span>}
-                          {url.password && <span className="badge badge-blue">Protected</span>}
+                      <td className="px-4 py-4 text-center">
+                        <div className="space-y-1">
+                          <div className="flex justify-center gap-1 flex-wrap">
+                            {url.disabled ? <span className="badge badge-red text-xs">Disabled</span> : expired ? <span className="badge badge-amber text-xs">Expired</span> : <span className="badge badge-green text-xs">Active</span>}
+                            {url.password && <span className="badge badge-blue text-xs">Protected</span>}
+                          </div>
+                          <p className="text-xs font-semibold text-slate-700 theme-dark:text-slate-300">{url.clicks || 0} clicks</p>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-center font-black text-slate-900 theme-dark:text-white">{url.clicks || 0}</td>
-                      <td className="px-4 py-3">
-                        <div className="flex flex-nowrap gap-2">
-                          <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(fullShortUrl(url.short_url), "Short link")}>Short link</button>
-                          <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => copyText(url.full_url, "Destination")}>Destination</button>
-                          <button className="btn btn-secondary px-3 py-2 text-xs" type="button" onClick={() => openAnalytics(url)}>Analytics</button>
-                          <button className="btn btn-primary px-3 py-2 text-xs" type="button" onClick={() => openManage(url)}>Manage</button>
+                      <td className="px-4 py-4">
+                        <div className="flex gap-1 justify-center flex-wrap">
+                          <button className="btn btn-secondary px-2 py-1.5 text-xs whitespace-nowrap" type="button" onClick={() => copyText(fullShortUrl(url.short_url), "Short link")} title="Copy short link">📋 Link</button>
+                          <button className="btn btn-secondary px-2 py-1.5 text-xs whitespace-nowrap" type="button" onClick={() => copyText(url.full_url, "Destination")} title="Copy destination URL">📄 Dest</button>
+                          <button className="btn btn-secondary px-2 py-1.5 text-xs whitespace-nowrap" type="button" onClick={() => openAnalytics(url)} title="View analytics">📊 Stats</button>
+                          <button className="btn btn-primary px-2 py-1.5 text-xs whitespace-nowrap" type="button" onClick={() => openManage(url)} title="Manage URL">⚙️ Edit</button>
                         </div>
                       </td>
                     </tr>
